@@ -18,7 +18,7 @@ def read(line):
     string = False
     tokens = []
     for i in line:
-        if i == " " and not string:
+        if i == " " and not string and txt != "" and not "\t" in txt:
             tokens.append(txt)
             txt = ""
         else:
@@ -27,12 +27,6 @@ def read(line):
             txt += i
     tokens.append(txt)
     return tokens
-
-funcs = {}
-
-class func:
-    def __init__(self,name,line) -> None:
-        funcs[name] = line+1
 
 class interpreter:
     def __init__(self) -> None:
@@ -44,8 +38,12 @@ class interpreter:
         chars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
         numbs = "1234567890"
         vars = {}
-        funcs = {}
         lineN = 0
+        openBrackets = 0
+        def convertVars(tokens,vars):
+            for i in tokens:
+                if i in vars:
+                    tokens[i] = vars[i]
         def _parseString(txt):
             qAm = 0
             ret = ""
@@ -60,9 +58,6 @@ class interpreter:
         def _print(item):
             if item in vars:
                 print(vars[item])
-            elif item in funcs:
-                #run func
-                print(runFunc(item))
             elif item[0] == '"':
                 print(_parseString(item))
         def _createVar(name,value):
@@ -75,8 +70,6 @@ class interpreter:
                 vars[name] = _parseString(value)
             elif value.isnumeric():
                 vars[name] = int(value)
-            elif value in funcs:
-                vars[name] = runFunc(value)
             else:
                 print("ERROR: unknown identifier: " + value)
         def _editVar(name,asignment,value):
@@ -87,8 +80,6 @@ class interpreter:
                     vars[name] = value
                 if value.isnumeric():
                     vars[name] = int(value)
-                elif value in funcs:
-                    vars[name] = runFunc(value)
                 else:
                     print("ERROR: unknown identifier: " + value)
             elif asignment == "+=":
@@ -98,8 +89,6 @@ class interpreter:
                     vars[name] += vars[value]
                 elif value.isnumeric():
                     vars[name] += int(value)
-                elif value in funcs:
-                    vars[name] += runFunc(value)
                 else:
                     print("ERROR: unknown identifier: " + value)
             elif asignment == "-=":
@@ -109,8 +98,6 @@ class interpreter:
                     vars[name] -= vars[value]
                 elif value.isnumeric():
                     vars[name] -= int(value)
-                elif value in funcs:
-                    vars[name] -= runFunc(value)
                 else:
                     print("ERROR: unknown identifier: " + value)
             elif asignment == "*=":
@@ -120,8 +107,6 @@ class interpreter:
                     vars[name] *= vars[value]
                 elif value.isnumeric():
                     vars[name] *= int(value)
-                elif value in funcs:
-                    vars[name] *= runFunc(value)
                 else:
                     print("ERROR: unknown identifier: " + value)
             elif asignment == "/=":
@@ -131,8 +116,6 @@ class interpreter:
                     vars[name] /= vars[value]
                 elif value.isnumeric():
                     vars[name] /= int(value)
-                elif value in funcs:
-                    vars[name] /= runFunc(value)
                 else:
                     print("ERROR: unknown identifier: " + value)
             elif asignment == "^=":
@@ -142,19 +125,9 @@ class interpreter:
                     vars[name] = pow(vars[name],vars[value])
                 elif value.isnumeric():
                     vars[name] = pow(vars[name],int(value))
-                elif value in funcs:
-                    vars[name] = pow(vars[name],runFunc(value))
                 else:
                     print("ERROR: unknown identifier: " + value)
-        def runFunc(name):
-            return funcs[name]-2
-        def convertVars(tokens,vars):
-            for i in tokens:
-                if i in vars:
-                    tokens[i] = vars[i]
         lines = readLines(code)
-        retN = 0
-        openBrackets = 0
         while lineN < len(lines):
             line = lines[lineN]
             tokens = read(line)
@@ -167,10 +140,6 @@ class interpreter:
                     _editVar(tokens[0],tokens[1],tokens[2])
                 elif tokens[0] == "jump":
                     lineN = int(tokens[1])-2
-                elif tokens[0] == "def":
-                    func(tokens[1],lineN)
-                elif tokens[0] in funcs:
-                    lineN = runFunc(tokens[0])
                 elif tokens[0] in self.customcmds:
                     i = 1
                     cmds = []
@@ -194,6 +163,14 @@ class interpreter:
                     elif tokens[2] == "<=":
                         if tokens[1] <= tokens[3]:
                             openBrackets -= 1
+                elif tokens[0] == "#":
+                    pass
+                elif "{" in tokens:
+                    pass
+                elif "}" in tokens:
+                    pass
+                else:
+                    print(f"ERROR: unknown command: {tokens[0]}")
             lineN += 1
             if "{" in tokens:
                 openBrackets += 1
