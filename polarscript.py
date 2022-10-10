@@ -34,12 +34,13 @@ class interpreter:
         pass
     def createCustom(self,func,name):
         self.customcmds[name] = func
-    def run(self,code):
+    def run(self,code,otf={}):
         chars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
         numbs = "1234567890"
         vars = {}
         lineN = 0
         openBrackets = 0
+        funcs = {}
         def convertVars(tokens,vars):
             for i in tokens:
                 if i in vars:
@@ -163,14 +164,45 @@ class interpreter:
                     elif tokens[2] == "<=":
                         if tokens[1] <= tokens[3]:
                             openBrackets -= 1
-                elif tokens[0] == "#":
+                elif tokens[0] == "#" or tokens[0] == "{" or tokens[0] == "}" or tokens[0] == " " or tokens[0] == "\t" or tokens[0] == "":
                     pass
-                elif "{" in tokens:
-                    pass
-                elif "}" in tokens:
-                    pass
+                elif tokens[0] == "def":
+                    flines = []
+                    ofb = 0
+                    for i in range(len(lines)):
+                        if i >= lineN:
+                            tks = read(lines[i])
+                            if "{" in tks:
+                                ofb += 1
+                            if "}" in tks:
+                                ofb -= 1
+                            if ofb < 1:
+                                break
+                            if i > lineN:
+                                flines.append(lines[i])
+                    funcs[tokens[1]] = flines
+                elif tokens[0] in funcs:
+                    preln = lineN
+                    ctxt = ""
+                    for i in funcs[tokens[0]]:
+                        for a in i:
+                            ctxt += a
+                        ctxt += "\n"
+                    ctxt.strip("\n")
+                    self.run(ctxt,funcs)
+                    lineN = preln
+                elif tokens[0] in otf:
+                    preln = lineN
+                    ctxt = ""
+                    for i in otf[tokens[0]]:
+                        for a in i:
+                            ctxt += a
+                        ctxt += "\n"
+                    ctxt.strip("\n")
+                    self.run(ctxt,funcs)
+                    lineN = preln
                 else:
-                    print(f"ERROR: unknown command: {tokens[0]}")
+                    print(f"ERROR: unknown command: {tokens[0]} {lineN}")
             lineN += 1
             if "{" in tokens:
                 openBrackets += 1
