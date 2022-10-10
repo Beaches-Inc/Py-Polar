@@ -142,6 +142,16 @@ class interpreter:
                     vars[name] = str(pow(int(vars[name]),int(value)))
                 else:
                     print("ERROR: unknown identifier: " + value)
+        def runFunc(name):
+            preln = lineN
+            ctxt = ""
+            for i in funcs[name]:
+                for a in i:
+                    ctxt += a
+                ctxt += "\n"
+            ctxt.strip("\n")
+            self.run(ctxt,funcs,vars)
+            lineN = preln
         lines = readLines(code)
         while lineN < len(lines):
             line = lines[lineN]
@@ -160,6 +170,7 @@ class interpreter:
                     cmds = []
                     for a in range(len(tokens)-1):
                         cmds.append(tokens[i])
+                        i += 1
                     self.customcmds[tokens[0]](cmds)
                 elif tokens[0] == "if":
                     convertVars(tokens,vars)
@@ -196,15 +207,7 @@ class interpreter:
                                 flines.append(lines[i])
                     funcs[tokens[1]] = flines
                 elif tokens[0] in funcs:
-                    preln = lineN
-                    ctxt = ""
-                    for i in funcs[tokens[0]]:
-                        for a in i:
-                            ctxt += a
-                        ctxt += "\n"
-                    ctxt.strip("\n")
-                    self.run(ctxt,funcs,vars)
-                    lineN = preln
+                    runFunc(tokens[0])
                 elif tokens[0] == "return":
                     if tokens[1] in vars:
                         return "\"" + vars[tokens[1]] + "\""
