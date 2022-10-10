@@ -51,7 +51,7 @@ def run():
     # create a window
     screen = pygame.display.set_mode(screen_size,pygame.RESIZABLE)
     pygame.display.set_caption("POS")
-    bgimg = pygame.image.load("vectorArt.png").convert_alpha()
+    bgimg = pygame.image.load("assets/vectorArt.png").convert_alpha()
     bg = pygame.transform.scale(bgimg,screen.get_size())
     prepos = (0,0)
 

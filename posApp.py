@@ -25,7 +25,7 @@ class windowObj(pos.windowObj):
         
 
 newWindow = window(0,10,100,100,(0,0,0))
-newObj = windowObj(newWindow,0,0,100,100,"images/cat.jpg")
+newObj = windowObj(newWindow,0,0,100,100,"assets/cat.jpg")
 
 @newObj.onclick
 def hi():
