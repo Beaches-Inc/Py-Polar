@@ -43,7 +43,9 @@ def pointCollision(x1,y1,w1,h1,x2,y2):
     if (p1[0] <= p3[0] <= p2[0]) and (p1[1] <= p3[1] <= p2[1]):
         return True
     return False
-
+keypress = []
+def onkeypress(func):
+    keypress.append([func,0])
 def run():
     pygame.init()
     screen_size = (700, 500)
@@ -76,13 +78,16 @@ def run():
                     if pointCollision(i.x, i.y-20,i.w,20,x,y):
                         prepos = pygame.mouse.get_pos()[0] - i.x, pygame.mouse.get_pos()[1] - i.y
                         i.mDown = True
-                        
             elif event.type == pygame.MOUSEBUTTONUP:
                 for i in windows:
                     if i.mDown:
                         i.mDown = False
                         
-                        
+        all_keys = pygame.key.get_pressed()
+        for i in keypress:
+            if i[1] < 1:
+                i[1] = i[0](all_keys,pygame)
+            i[1] -= 1
         bg = pygame.transform.scale(bgimg,screen.get_size())
         screen.blit(bg, (0, 0))
         for i in windows:

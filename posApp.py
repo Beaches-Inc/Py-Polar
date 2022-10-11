@@ -23,18 +23,35 @@ class windowObj(pos.windowObj):
 
 # newWindow = window(0,10,100,100,(0,0,0))
 # newObj = windowObj(newWindow,0,0,100,100,"assets/cat.jpg")
-windows = {}
-objs = {}
+# windows = {}
+# objs = {}
+apps = ['test.py']
 if __name__ == "__main__":
-    interpret = polarscript.interpreter()
-    def createWindow(args):
-        windows[args[0]] = window(int(args[1]),int(args[2]),int(args[3]),int(args[4]),(175,175,175))
-    def createObj(args):
-        objs[args[0]] = windowObj(windows[args[1]],int(args[2]),int(args[3]),int(args[4]),int(args[5]),args[6])
-    interpret.createCustom(createWindow,"newWindow")
-    interpret.createCustom(createObj,"newObj")
-    f = open("test.ps","r")
-    content = f.read()
-    f.close()
-    interpret.run(content)
+    def runFile(keys,pygame):
+        if keys[pygame.K_LSHIFT] and keys[pygame.K_RSHIFT]:
+            for i in apps:
+                f = open(i,"r")
+                content = f.read()
+                f.close()
+                exec(content)
+            return 180
+        return 0
+    pos.onkeypress(runFile)
+    # going to test if we can use python
+
+    # if we decide to keep using ps:
+
+    #interpret = polarscript.interpreter()
+    #def createWindow(args):
+    #    windows[args[0]] = window(int(args[1]),int(args[2]),int(args[3]),int(args[4]),(175,175,175))
+    #def createObj(args):
+    #    objs[args[0]] = windowObj(windows[args[1]],int(args[2]),int(args[3]),int(args[4]),int(args[5]),args[6])
+    #interpret.createCustom(createWindow,"newWindow")
+    #interpret.createCustom(createObj,"newObj")
+    #f = open("test.ps","r")
+    #content = f.read()
+    #f.close()
+    #interpret.run(content)
+
+
     pos.run()
