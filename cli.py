@@ -1,4 +1,3 @@
-files = {}
 cmds = []
 class command:
     def __init__(self,name,oncall) -> None:
@@ -18,30 +17,30 @@ def printcm(args):
     except:
         print("Error: Not enough args")
 def newFile(args):
-    files[args[0]] = ""
+    if len(args) > 1:
+        print("Error: Too many args")
+        return
+    f = open(args[0],"w")
+    f.close()
 def editFile(args):
-    try:
-        files[args[0]] = args[1]
-    except:
-        print("Error: Not enough args")
-def delFile(args):
-    try:
-        del files[args[0]]
-    except:
-        print("Error: File does not exist")
+    if len(args) > 2:
+        print("Error: Too many args")
+        return
+    f = open(args[0],"w")
+    f.write(args[1])
+    f.close()
 def readFile(args):
-    print(files[args[0]])
-def math(args): return eval(f'{args[0]} {args[1]} {args[2]}')
-math(["__import__('os').system('ls')","",""])
+    f = open(args[0])
+    print(f.read())
+    f.close()
 printcmd = command("print",printcm)
 printcmd = command("newFile",newFile)
 printcmd = command("editFile",editFile)
-printcmd = command("delFile",delFile)
 printcmd = command("readFile",readFile)
 
 def main():
     running = True
-    while True:
+    while running:
         cmd = input(">>> ")
         # parse response
         tokens = []
@@ -59,9 +58,12 @@ def main():
         tokens.append(token)
         args = []
         cmd = tokens[0]
+        if cmd == "quit()":
+            running = False
         for i in range(len(tokens)-1):
             args.append(tokens[i+1])
         for i in cmds:
             i.call(cmd,args)
             
-main()
+if __name__ == "__main__":
+    main()

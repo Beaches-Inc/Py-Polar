@@ -60,7 +60,6 @@ class interpreter:
             elif item[0] == '"':
                 print(_parseString(item))
             elif item in funcs:
-                preln = lineN
                 ctxt = ""
                 for i in funcs[item]:
                     for a in i:
