@@ -1,5 +1,5 @@
 import pos
-import polarscript
+# import polarscript
 
 class window(pos.window):
     def __init__(self, x, y, w, h, color):
@@ -26,6 +26,20 @@ class windowObj(pos.windowObj):
 # windows = {}
 # objs = {}
 apps = ['test.py']
+banned = ['import sys',"from sys","import os","from os"]
+def checkBanned(content):
+    lines = []
+    line = ""
+    for i in content:
+        if i == "\n":
+            lines.append(line)
+        else:
+            line += i
+    for i in lines:
+        for a in banned:
+            if a in i:
+                return True
+    return False
 if __name__ == "__main__":
     def runFile(keys,pygame):
         if keys[pygame.K_LSHIFT] and keys[pygame.K_RSHIFT]:
@@ -33,7 +47,11 @@ if __name__ == "__main__":
                 f = open(i,"r")
                 content = f.read()
                 f.close()
-                exec(content)
+                if checkBanned(content):
+                    if input("potentially dangerous app. continue? y/n").lower() == "y":
+                        exec(content)
+                else:
+                    exec(content)
             return 180
         return 0
     pos.onkeypress(runFile)

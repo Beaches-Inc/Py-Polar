@@ -87,7 +87,7 @@ def run():
         for i in keypress:
             if i[1] < 1:
                 i[1] = i[0](all_keys,pygame)
-            i[1] -= 1
+            if i[1] > 0: i[1] -= 1
         bg = pygame.transform.scale(bgimg,screen.get_size())
         screen.blit(bg, (0, 0))
         for i in windows:
