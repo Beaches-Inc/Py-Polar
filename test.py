@@ -1,2 +1,1 @@
-import posApp as pa
-window = pa.window(0,10,100,100,"#333333")
+window = window(0,10,100,100,"#333333")
