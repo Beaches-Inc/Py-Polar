@@ -25,7 +25,20 @@ class windowObj(pos.windowObj):
 # newObj = windowObj(newWindow,0,0,100,100,"assets/cat.jpg")
 # windows = {}
 # objs = {}
-apps = ['test.py']
+
+# Get apps
+f = open("apps.psa","r")
+apps = []
+txt = ""
+for i in f.read():
+    txt.replace(" ","")
+    if i == "\n" and txt != "":
+        apps.append(txt)
+        txt = ""
+    else:
+        txt += i
+apps.append(txt)
+print(apps)
 banned = ['import sys',"from sys","import os","from os"]
 def checkBanned(content):
     lines = []
