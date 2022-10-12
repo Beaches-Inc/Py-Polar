@@ -33,14 +33,15 @@ txt = ""
 for i in f.read():
     txt.replace(" ","")
     if i == "\n" and txt != "":
-        apps.append(txt)
+        apps.append("apps/"+txt)
         txt = ""
     else:
         txt += i
-apps.append(txt)
-print(apps)
-banned = ['import sys',"from sys","import os","from os"]
+apps.append("apps/"+txt)
+
+# check if their are any banned imports
 def checkBanned(content):
+    banned = ['import sys',"from sys","import os","from os"]
     lines = []
     line = ""
     for i in content:
