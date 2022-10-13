@@ -14,7 +14,7 @@ class windowObj(pos.windowObj):
         return super().goto(rel_x, rel_y)
     def resize(self, w, h):
         return super().resize(w, h)
-    def move(self,x_am,y_am):
+    def move(self,x_am=0,y_am=0):
         self.goto(self.x+x_am,self.y+y_am)
     def onclick(self, func):
         return super().onclick(func)
@@ -42,8 +42,11 @@ apps.append("apps/"+txt)
 def onkeypress(func):
     pos.onkeypress(func)
     
-def runFunc(func,keys,pg):
-    return func(keys,pg)
+def runFunc(func,keys=0,pg=0):
+    if keys != 0 and pg != 0:
+        return func(keys,pg)
+    else:
+        func()
 
 # check if their are any banned imports
 def checkBanned(content):
@@ -60,7 +63,7 @@ def checkBanned(content):
             if a in i:
                 return True
     return False
-if __name__ == "__main__":
+def main():
     def runFile(keys,pygame):
         if keys[pygame.K_LSHIFT] and keys[pygame.K_RSHIFT]:
             for i in apps:
@@ -76,3 +79,5 @@ if __name__ == "__main__":
         return 0
     pos.onkeypress(runFile)
     pos.run()
+if __name__ == "__main__":
+    main()

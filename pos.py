@@ -33,7 +33,8 @@ class windowObj:
     def onclick(self,func):
         self.func = func
     def click(self):
-        self.func()
+        from posApp import runFunc
+        runFunc(self.func)
 
 def pointCollision(x1,y1,w1,h1,x2,y2):
     p1 = (x1,y1)
