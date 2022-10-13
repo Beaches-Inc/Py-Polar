@@ -3,7 +3,6 @@ import pygame
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
-
 def none():
     pass
 
@@ -85,9 +84,14 @@ def run():
                         
         all_keys = pygame.key.get_pressed()
         for i in keypress:
-            if i[1] < 1:
-                i[1] = i[0](all_keys,pygame)
-            if i[1] > 0: i[1] -= 1
+            try:
+                if i[1] < 1:
+                    from posApp import runFunc
+                    i[1] = runFunc(i[0],all_keys,pygame)
+                if i[1] > 0: i[1] -= 1
+            except TypeError:
+                print("Error with app")
+                print(f"DEBUG: {i}, {i[1]}, {keypress}")
         bg = pygame.transform.scale(bgimg,screen.get_size())
         screen.blit(bg, (0, 0))
         for i in windows:

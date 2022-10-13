@@ -39,6 +39,12 @@ for i in f.read():
         txt += i
 apps.append("apps/"+txt)
 
+def onkeypress(func):
+    pos.onkeypress(func)
+    
+def runFunc(func,keys,pg):
+    return func(keys,pg)
+
 # check if their are any banned imports
 def checkBanned(content):
     banned = ['import sys',"from sys","import os","from os"]
@@ -62,28 +68,11 @@ if __name__ == "__main__":
                 content = f.read()
                 f.close()
                 if checkBanned(content):
-                    if input("potentially dangerous app. continue? y/n").lower() == "y":
+                    if input(f"potentially dangerous app \"{i}\". continue? y/n").lower() == "y":
                         exec(content)
                 else:
                     exec(content)
             return 180
         return 0
     pos.onkeypress(runFile)
-    # going to test if we can use python
-
-    # if we decide to keep using ps:
-
-    #interpret = polarscript.interpreter()
-    #def createWindow(args):
-    #    windows[args[0]] = window(int(args[1]),int(args[2]),int(args[3]),int(args[4]),(175,175,175))
-    #def createObj(args):
-    #    objs[args[0]] = windowObj(windows[args[1]],int(args[2]),int(args[3]),int(args[4]),int(args[5]),args[6])
-    #interpret.createCustom(createWindow,"newWindow")
-    #interpret.createCustom(createObj,"newObj")
-    #f = open("test.ps","r")
-    #content = f.read()
-    #f.close()
-    #interpret.run(content)
-
-
     pos.run()
