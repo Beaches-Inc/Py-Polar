@@ -46,7 +46,7 @@ def runFunc(func,keys=0,pg=0):
     if keys != 0 and pg != 0:
         return func(keys,pg)
     else:
-        func()
+        return func()
 
 # check if their are any banned imports
 def checkBanned(content):
